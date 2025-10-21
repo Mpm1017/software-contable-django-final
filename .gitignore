@@ -1,0 +1,43 @@
+¡Perfecto! Ya tienes el entorno base listo.
+
+Tercer Paso: Instalación de Django y Git
+Ahora vamos a instalar el framework Django dentro de tu entorno virtual y asegurarnos de que tienes Git (el sistema de control de versiones) instalado y configurado, lo cual es esencial para el control de versiones y para que SonarQube analice tu código con cada push.
+
+Instalar Django (y lo guardaremos en un archivo de requisitos):
+
+Bash
+
+pip install django
+pip freeze > requirements.txt
+Verificar Git: Asegúrate de que tienes Git instalado en tu sistema. Si puedes ejecutar el siguiente comando sin errores, está listo:
+
+Bash
+
+git --version
+(Si este comando da un error, deberás instalar Git en tu sistema operativo antes de continuar. Puedes descargarlo de git-scm.com.)
+
+Inicializar Git en la carpeta del proyecto:
+
+Bash
+
+git init
+Esto convierte tu carpeta en un repositorio de Git local.
+
+Crear el archivo .gitignore: Este archivo le dice a Git qué archivos debe ignorar (como las carpetas del entorno virtual, claves secretas, etc.). Esto es una buena práctica y ayuda a SonarQube.
+
+Crea un archivo llamado .gitignore en la raíz de tu proyecto (software contable django final) y pega el siguiente contenido:
+
+# Virtual Environment
+venv/
+__pycache__/
+
+# Django specific
+*.log
+*.pot
+*.mo
+*.orig
+db.sqlite3
+.DS_Store
+
+# My settings (sensitive data)
+config/settings/local.py
