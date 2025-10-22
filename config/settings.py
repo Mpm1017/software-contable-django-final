@@ -9,7 +9,9 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
+from decouple import config
+from dj_database_url import parse as db_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,12 +22,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-dmy(r!)z($e@9ddlj!g5nq(9vr4#&468%-1lhv^0nzra99j855'
+SECRET_KEY = config('SECRET_KEY')
 
+# ************************************************
+# CORRECCIÓN CLAVE 1: Forzamos DEBUG a True para desarrollo.
+# (La lectura desde .env estaba fallando y causaba el CommandError)
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True 
 
 ALLOWED_HOSTS = []
+# ************************************************
 
 
 # Application definition
@@ -37,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -50,11 +57,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'config.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        # ¡Añadimos BASE_DIR / 'templates' a DIRS!
+        'DIRS': [BASE_DIR / 'templates'], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,10 +80,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': config(
+        'DATABASE_URL',
+        default='sqlite:///db.sqlite3', # Opción de fallback si el .env no existe
+        cast=db_url
+    )
 }
 
 
@@ -97,6 +105,21 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# ************************************************
+# CORRECCIÓN CLAVE 2: Configuración de Login y Templates
+# Esto resuelve el error TemplateDoesNotExist.
+# La URL a la que se redirige después de que un usuario hace login exitosamente.
+LOGIN_REDIRECT_URL = '/'  
+# La URL a la que se redirige después de que un usuario hace logout.
+LOGOUT_REDIRECT_URL = '/' 
+
+# La URL (nombre de ruta) para la vista de login, usada por el decorador @login_required.
+LOGIN_URL = 'login' 
+
+# Le decimos a Django dónde buscar el archivo login.html
+LOGIN_TEMPLATE_NAME = 'registration/login.html'
+# ************************************************
 
 
 # Internationalization
@@ -120,3 +143,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Internationalization
+# https://docs.djangoproject.com/en/5.2/topics/i18n/
+# ... (El resto del código de settings.py)

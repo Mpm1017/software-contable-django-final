@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario</title>
+    <style>
+        /* Estilos básicos para centrar el formulario y darle un aspecto limpio */
+        body { font-family: 'Arial', sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        form { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); width: 100%; max-width: 400px; }
+        h2 { text-align: center; color: #333; margin-bottom: 30px; }
+        /* Estilo para los campos de formulario */
+        p { margin-bottom: 20px; }
+        input[type="text"], input[type="email"], input[type="password"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        /* Estilo del botón */
+        button { background-color: #007bff; color: white; padding: 12px 20px; margin: 20px 0 10px 0; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; transition: background-color 0.3s ease; }
+        button:hover { background-color: #0056b3; }
+        /* Estilo para los enlaces de navegación */
+        .links { text-align: center; font-size: 14px; margin-top: 15px; }
+        .links a { color: #007bff; text-decoration: none; }
+        .links a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <form method="post">
+        <h2>Regístrate</h2>
+        {% csrf_token %}
+        
+        <!-- Muestra los campos del formulario generados por Django (username, password, password confirmation) -->
+        {{ form.as_p }}
+        
+        <button type="submit">Registrar Cuenta</button>
+
+        <div class="links">
+            <!-- Este enlace lleva de vuelta a la ruta de login -->
+            ¿Ya tienes cuenta? <a href="{% url 'login' %}">Iniciar Sesión</a>
+        </div>
+    </form>
+</body>
+</html>
