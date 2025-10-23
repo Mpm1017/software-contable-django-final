@@ -1,25 +1,33 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse 
-from .forms import RegisterForm # Importamos el nuevo formulario
+from django.contrib.auth.decorators import login_required # Importación requerida para proteger la vista
+from .forms import RegisterForm
 
 def index(request):
-    # Redirigimos al login como punto de entrada principal
+    # Si el usuario está autenticado (logueado), lo enviamos al dashboard.
+    # Esto evita el loop de redirección y es la lógica correcta.
+    if request.user.is_authenticated:
+        return redirect('dashboard') 
+    # Si NO está autenticado, lo enviamos al login.
     return redirect('login') 
 
-# FUNCIÓN ACTUALIZADA: Vista de Registro con lógica de formulario
+# FUNCIÓN NUEVA: El Dashboard (Página principal para usuarios logueados)
+# Solo permite el acceso si el usuario está logueado.
+@login_required
+def dashboard(request):
+    context = {
+        'username': request.user.username,
+    }
+    # Renderiza la plantilla dashboard.html
+    return render(request, 'users/dashboard.html', context)
+
+# Vista de Registro (Se mantiene la lógica de formulario funcional)
 def register(request):
     if request.method == 'POST':
-        # 1. Crear formulario con los datos POST
         form = RegisterForm(request.POST)
         if form.is_valid():
-            # 2. Si es válido, guardar el usuario y hashear la contraseña
             form.save()
-            # 3. Redirigir al login para que el nuevo usuario inicie sesión
             return redirect('login') 
     else:
-        # Si es GET, creamos un formulario vacío para mostrarlo
         form = RegisterForm()
     
-    # Renderiza la plantilla 'registration/register.html' y pasa el formulario
     return render(request, 'registration/register.html', {'form': form})
-

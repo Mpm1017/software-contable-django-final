@@ -1,7 +1,3 @@
-"""
-URL configuration for config project.
-... (Resto de comentarios de Django)
-"""
 from django.contrib import admin
 from django.urls import path, include
 
