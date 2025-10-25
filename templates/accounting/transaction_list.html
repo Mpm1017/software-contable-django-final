@@ -1,0 +1,123 @@
+{% extends 'accounting/base.html' %}
+
+{% block title %}Transacciones - Software Contable{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>📊 Mis Transacciones</h2>
+        <a href="{% url 'transaction_create' %}" class="btn btn-primary">+ Nueva Transacción</a>
+    </div>
+    
+    <!-- Estadísticas -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 1.5rem; border-radius: 10px; color: white;">
+            <div style="font-size: 0.9rem; margin-bottom: 0.5rem;">Total Ingresos</div>
+            <div style="font-size: 1.75rem; font-weight: bold;">${{ total_income|floatformat:2 }}</div>
+        </div>
+        <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 1.5rem; border-radius: 10px; color: white;">
+            <div style="font-size: 0.9rem; margin-bottom: 0.5rem;">Total Gastos</div>
+            <div style="font-size: 1.75rem; font-weight: bold;">${{ total_expense|floatformat:2 }}</div>
+        </div>
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem; border-radius: 10px; color: white;">
+            <div style="font-size: 0.9rem; margin-bottom: 0.5rem;">Balance</div>
+            <div style="font-size: 1.75rem; font-weight: bold;">${{ balance|floatformat:2 }}</div>
+        </div>
+    </div>
+    
+    <!-- Filtros -->
+    <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+        <form method="get" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: end;">
+            <div style="flex: 1; min-width: 150px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem;">Tipo</label>
+                <select name="type" class="form-control">
+                    <option value="">Todos</option>
+                    <option value="INCOME" {% if request.GET.type == 'INCOME' %}selected{% endif %}>Ingresos</option>
+                    <option value="EXPENSE" {% if request.GET.type == 'EXPENSE' %}selected{% endif %}>Gastos</option>
+                </select>
+            </div>
+            <div style="flex: 1; min-width: 150px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem;">Cuenta</label>
+                <select name="account" class="form-control">
+                    <option value="">Todas</option>
+                    {% for account in accounts %}
+                    <option value="{{ account.id }}" {% if request.GET.account == account.id|stringformat:"s" %}selected{% endif %}>
+                        {{ account.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="flex: 1; min-width: 150px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem;">Categoría</label>
+                <select name="category" class="form-control">
+                    <option value="">Todas</option>
+                    {% for category in categories %}
+                    <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary btn-sm">Filtrar</button>
+                <a href="{% url 'transaction_list' %}" class="btn btn-secondary btn-sm">Limpiar</a>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Tabla de Transacciones -->
+    {% if transactions %}
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Descripción</th>
+                    <th>Tipo</th>
+                    <th>Categoría</th>
+                    <th>Cuenta</th>
+                    <th>Monto</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.transaction_date|date:"d/m/Y" }}</td>
+                    <td>
+                        <strong>{{ transaction.description }}</strong>
+                        {% if transaction.notes %}
+                        <br><small style="color: #666;">{{ transaction.notes|truncatewords:10 }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if transaction.transaction_type == 'INCOME' %}
+                        <span class="badge badge-income">Ingreso</span>
+                        {% else %}
+                        <span class="badge badge-expense">Gasto</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ transaction.category.name }}</td>
+                    <td>{{ transaction.account.name }}</td>
+                    <td style="font-weight: bold; {% if transaction.transaction_type == 'INCOME' %}color: #28a745;{% else %}color: #dc3545;{% endif %}">
+                        {% if transaction.transaction_type == 'INCOME' %}+{% else %}-{% endif %}${{ transaction.amount|floatformat:2 }}
+                    </td>
+                    <td>
+                        <a href="{% url 'transaction_update' transaction.pk %}" class="btn btn-sm btn-secondary" style="margin-right: 0.5rem;">Editar</a>
+                        <a href="{% url 'transaction_delete' transaction.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">📊</div>
+        <h3>No hay transacciones registradas</h3>
+        <p>Comienza creando tu primera transacción para llevar el control de tus finanzas.</p>
+        <a href="{% url 'transaction_create' %}" class="btn btn-primary" style="margin-top: 1rem;">+ Nueva Transacción</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

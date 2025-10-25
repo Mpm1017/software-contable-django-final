@@ -1,0 +1,66 @@
+═══════════════════════════════════════════════════════════════
+  INSTRUCCIONES PARA INICIAR EL SERVIDOR CORRECTAMENTE
+═══════════════════════════════════════════════════════════════
+
+PROBLEMA: ModuleNotFoundError: No module named 'rest_framework'
+
+SOLUCIÓN: Debes activar el entorno virtual ANTES de ejecutar runserver
+
+═══════════════════════════════════════════════════════════════
+  PASOS A SEGUIR (PowerShell):
+═══════════════════════════════════════════════════════════════
+
+1. Abre PowerShell en la carpeta del proyecto
+
+2. Activa el entorno virtual:
+   .\venv\Scripts\Activate.ps1
+
+3. Si aparece error de permisos, ejecuta esto primero:
+   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+4. Luego activa nuevamente:
+   .\venv\Scripts\Activate.ps1
+
+5. Verás que aparece (venv) al inicio de la línea
+
+6. Ahora ejecuta:
+   python manage.py runserver
+
+═══════════════════════════════════════════════════════════════
+  ALTERNATIVA (si sigue sin funcionar):
+═══════════════════════════════════════════════════════════════
+
+Ejecuta directamente con la ruta completa del Python del venv:
+
+.\venv\Scripts\python.exe manage.py runserver
+
+═══════════════════════════════════════════════════════════════
+  VERIFICAR QUE EL VENV ESTÁ ACTIVO:
+═══════════════════════════════════════════════════════════════
+
+Cuando el venv está activo, verás:
+
+(venv) PS C:\Users\Maribel Posada Mira\Desktop\software contable django final>
+
+El (venv) al inicio indica que está activo.
+
+═══════════════════════════════════════════════════════════════
+  CAMBIOS REALIZADOS:
+═══════════════════════════════════════════════════════════════
+
+✅ Se corrigió el error 405 al cerrar sesión
+✅ Ahora el logout funciona correctamente con GET y POST
+✅ Se limpian los tokens JWT al cerrar sesión
+✅ Mensaje de confirmación al cerrar sesión
+
+═══════════════════════════════════════════════════════════════
+  PROBAR EL LOGOUT:
+═══════════════════════════════════════════════════════════════
+
+1. Inicia sesión en http://127.0.0.1:8000/login/
+2. Ve al dashboard
+3. Haz clic en "Cerrar Sesión"
+4. Deberías ver el mensaje: "¡Has cerrado sesión exitosamente!"
+5. Serás redirigido al login
+
+═══════════════════════════════════════════════════════════════

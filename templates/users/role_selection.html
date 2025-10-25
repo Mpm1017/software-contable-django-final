@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleccionar Tipo de Usuario - Software Contable</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .role-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .role-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .role-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+        
+        .role-icon {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .role-card h2 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .role-card p {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .role-card .features {
+            text-align: left;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .role-card .features li {
+            margin: 0.5rem 0;
+            color: #555;
+            font-size: 0.9rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .btn-user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-user:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-admin {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .btn-admin:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4);
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 2rem;
+        }
+        
+        .footer a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+        
+        .footer a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .role-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💼 Software Contable</h1>
+            <p>Selecciona cómo deseas ingresar al sistema</p>
+        </div>
+        
+        <div class="role-cards">
+            <!-- Tarjeta Usuario Normal -->
+            <div class="role-card" onclick="window.location.href='{% url 'user_login' %}'">
+               
+                <h2>Usuario</h2>
+                
+                
+
+                <a href="{% url 'user_login' %}" class="btn btn-user">Ingresar como Usuario</a>
+            </div>
+            
+            <!-- Tarjeta Administrador -->
+            <div class="role-card" onclick="window.location.href='{% url 'admin_login' %}'">
+                
+                <h2>Administrador</h2>
+               
+                
+
+                
+                <a href="{% url 'admin_login' %}" class="btn btn-admin">Ingresar como Administrador</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>¿No tienes cuenta? <a href="{% url 'register' %}">Regístrate aquí</a></p>
+        </div>
+    </div>
+</body>
+</html>

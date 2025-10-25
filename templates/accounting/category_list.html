@@ -1,0 +1,61 @@
+{% extends 'accounting/base.html' %}
+
+{% block title %}Categorías - Software Contable{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>🏷️ Mis Categorías</h2>
+        <a href="{% url 'category_create' %}" class="btn btn-primary">+ Nueva Categoría</a>
+    </div>
+    
+    {% if categories %}
+    <!-- Categorías de Ingresos -->
+    <h3 style="color: #28a745; margin-bottom: 1rem;">💰 Ingresos</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        {% for category in categories %}
+        {% if category.category_type == 'INCOME' %}
+        <div style="background: white; border-left: 4px solid {{ category.color }}; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h4 style="margin-bottom: 0.5rem;">{{ category.name }}</h4>
+                    {% if category.description %}
+                    <p style="font-size: 0.85rem; color: #666;">{{ category.description|truncatewords:10 }}</p>
+                    {% endif %}
+                </div>
+                <div style="width: 30px; height: 30px; background: {{ category.color }}; border-radius: 50%;"></div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    
+    <!-- Categorías de Gastos -->
+    <h3 style="color: #dc3545; margin-bottom: 1rem;">💸 Gastos</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;">
+        {% for category in categories %}
+        {% if category.category_type == 'EXPENSE' %}
+        <div style="background: white; border-left: 4px solid {{ category.color }}; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h4 style="margin-bottom: 0.5rem;">{{ category.name }}</h4>
+                    {% if category.description %}
+                    <p style="font-size: 0.85rem; color: #666;">{{ category.description|truncatewords:10 }}</p>
+                    {% endif %}
+                </div>
+                <div style="width: 30px; height: 30px; background: {{ category.color }}; border-radius: 50%;"></div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">🏷️</div>
+        <h3>No hay categorías registradas</h3>
+        <p>Crea categorías para organizar mejor tus transacciones.</p>
+        <a href="{% url 'category_create' %}" class="btn btn-primary" style="margin-top: 1rem;">+ Nueva Categoría</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

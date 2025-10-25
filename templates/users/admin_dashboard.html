@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Administrador - Software Contable</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+        
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .navbar-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .welcome-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .welcome-card h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .welcome-card p {
+            color: #666;
+        }
+        
+        /* Estadísticas */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-card .label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .card-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #f5576c;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .card-link:hover {
+            text-decoration: underline;
+        }
+        
+        .admin-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .jwt-info {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+        
+        .jwt-info p {
+            margin: 0;
+            color: #0c5460;
+            font-size: 0.9rem;
+        }
+        
+        .section-title {
+            color: #333;
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f5576c;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            💼 Software Contable - Administrador
+        </div>
+        <div class="navbar-user">
+            <span class="user-badge">👨‍💼 {{ username }}</span>
+            <a href="{% url 'logout' %}" class="logout-btn">Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="welcome-card">
+            <h1>¡Bienvenido, Administrador {{ username }}! 👨‍💼</h1>
+            <p>Panel de control administrativo con acceso completo al sistema</p>
+            <span class="admin-badge">ACCESO TOTAL</span>
+            
+            {% if access_token %}
+            <div class="jwt-info">
+                <p>🔐 <strong>Sesión administrativa segura con JWT activa</strong> - Acceso completo protegido</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Estadísticas del Sistema -->
+        <h2 class="section-title">📊 Estadísticas del Sistema</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="icon">👥</div>
+                <div class="value">{{ total_usuarios }}</div>
+                <div class="label">Usuarios Totales</div>
+            </div>
+            <div class="stat-card">
+                <div class="icon">📝</div>
+                <div class="value">{{ total_asientos }}</div>
+                <div class="label">Asientos Contables</div>
+            </div>
+            <div class="stat-card">
+                <div class="icon">🏦</div>
+                <div class="value">{{ total_cuentas }}</div>
+                <div class="label">Cuentas Contables</div>
+            </div>
+        </div>
+
+        <!-- Funciones Administrativas -->
+        <h2 class="section-title">⚙️ Gestión del Sistema</h2>
+        <div class="cards-grid">
+            <!-- Gestión de Usuarios -->
+            <div class="card" onclick="window.location.href='/admin/auth/user/'">
+                <div class="card-icon">👥</div>
+                <h3>Gestión de Usuarios</h3>
+                <p>Administrar usuarios, permisos y roles del sistema.</p>
+                <a href="/admin/auth/user/" class="card-link">Gestionar usuarios →</a>
+            </div>
+
+            <!-- Plan de Cuentas -->
+            <div class="card">
+                <div class="card-icon">🏦</div>
+                <h3>Plan de Cuentas</h3>
+                <p>Configurar y gestionar el plan de cuentas contable completo.</p>
+                <span class="card-link">Configurar plan →</span>
+            </div>
+
+            <!-- Asientos Contables -->
+            <div class="card">
+                <div class="card-icon">📝</div>
+                <h3>Asientos Contables</h3>
+                <p>Ver y gestionar todos los asientos contables del sistema.</p>
+                <span class="card-link">Ver asientos →</span>
+            </div>
+
+            <!-- Reportes Globales -->
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <h3>Reportes Financieros</h3>
+                <p>Balance General, Estado de Resultados y más reportes.</p>
+                <span class="card-link">Ver reportes →</span>
+            </div>
+
+            <!-- Auditoría -->
+            <div class="card">
+                <div class="card-icon">🔍</div>
+                <h3>Auditoría</h3>
+                <p>Revisar logs y actividad del sistema para control.</p>
+                <span class="card-link">Ver auditoría →</span>
+            </div>
+
+            <!-- Configuración -->
+            <div class="card" onclick="window.location.href='/admin/'">
+                <div class="card-icon">⚙️</div>
+                <h3>Configuración</h3>
+                <p>Acceso al panel de administración de Django.</p>
+                <a href="/admin/" class="card-link">Ir a admin →</a>
+            </div>
+        </div>
+
+        <!-- Funciones de Usuario (también disponibles) -->
+        <h2 class="section-title">📱 Funciones de Usuario</h2>
+        <div class="cards-grid">
+            <div class="card" onclick="window.location.href='{% url 'transaction_list' %}'">
+                <div class="card-icon">📊</div>
+                <h3>Transacciones</h3>
+                <p>Ver y gestionar transacciones.</p>
+                <a href="{% url 'transaction_list' %}" class="card-link">Ver transacciones →</a>
+            </div>
+
+            <div class="card" onclick="window.location.href='{% url 'account_list' %}'">
+                <div class="card-icon">💳</div>
+                <h3>Cuentas</h3>
+                <p>Administrar cuentas del sistema.</p>
+                <a href="{% url 'account_list' %}" class="card-link">Ver cuentas →</a>
+            </div>
+
+            <div class="card" onclick="window.location.href='{% url 'category_list' %}'">
+                <div class="card-icon">🏷️</div>
+                <h3>Categorías</h3>
+                <p>Gestionar categorías contables.</p>
+                <a href="{% url 'category_list' %}" class="card-link">Ver categorías →</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Usuario - Software Contable</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+        
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .navbar-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .welcome-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .welcome-card h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .welcome-card p {
+            color: #666;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .card-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .card-link:hover {
+            text-decoration: underline;
+        }
+        
+        .jwt-info {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+        
+        .jwt-info p {
+            margin: 0;
+            color: #0c5460;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            💼 Software Contable - Usuario
+        </div>
+        <div class="navbar-user">
+            <span class="user-badge">👤 {{ username }}</span>
+            <a href="{% url 'logout' %}" class="logout-btn">Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="welcome-card">
+            <h1>¡Bienvenido, {{ username }}! 👋</h1>
+            <p>Panel de control para usuarios</p>
+            
+            {% if access_token %}
+            <div class="jwt-info">
+                <p>🔐 <strong>Sesión segura con JWT activa</strong> - Tu sesión está protegida</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="cards-grid">
+            <!-- Mis Transacciones -->
+            <div class="card" onclick="window.location.href='{% url 'transaction_list' %}'">
+                <div class="card-icon">📊</div>
+                <h3>Mis Transacciones</h3>
+                <p>Registra y gestiona tus transacciones financieras personales.</p>
+                <a href="{% url 'transaction_list' %}" class="card-link">Ver transacciones →</a>
+            </div>
+
+            <!-- Mis Cuentas -->
+            <div class="card" onclick="window.location.href='{% url 'account_list' %}'">
+                <div class="card-icon">💳</div>
+                <h3>Mis Cuentas</h3>
+                <p>Administra tus cuentas bancarias y de efectivo.</p>
+                <a href="{% url 'account_list' %}" class="card-link">Ver cuentas →</a>
+            </div>
+
+            <!-- Categorías -->
+            <div class="card" onclick="window.location.href='{% url 'category_list' %}'">
+                <div class="card-icon">🏷️</div>
+                <h3>Categorías</h3>
+                <p>Organiza tus transacciones por categorías.</p>
+                <a href="{% url 'category_list' %}" class="card-link">Ver categorías →</a>
+            </div>
+
+            <!-- Mis Reportes -->
+            <div class="card">
+                <div class="card-icon">📈</div>
+                <h3>Mis Reportes</h3>
+                <p>Visualiza reportes de tus finanzas personales.</p>
+                <span class="card-link">Próximamente →</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+{% extends 'accounting/base.html' %}
+
+{% block title %}Cuentas - Software Contable{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>💳 Mis Cuentas</h2>
+        <a href="{% url 'account_create' %}" class="btn btn-primary">+ Nueva Cuenta</a>
+    </div>
+    
+    {% if accounts %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+        {% for account in accounts %}
+        <div style="background: {% if account.is_active %}linear-gradient(135deg, #667eea 0%, #764ba2 100%){% else %}#6c757d{% endif %}; padding: 1.5rem; border-radius: 10px; color: white;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                <div>
+                    <h3 style="margin-bottom: 0.5rem;">{{ account.name }}</h3>
+                    <span style="background: rgba(255,255,255,0.2); padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.85rem;">
+                        {{ account.get_account_type_display }}
+                    </span>
+                </div>
+                {% if not account.is_active %}
+                <span style="background: #ffc107; color: #333; padding: 0.25rem 0.5rem; border-radius: 5px; font-size: 0.75rem; font-weight: bold;">
+                    INACTIVA
+                </span>
+                {% endif %}
+            </div>
+            <div style="font-size: 2rem; font-weight: bold; margin: 1rem 0;">
+                ${{ account.balance|floatformat:2 }}
+            </div>
+            {% if account.description %}
+            <p style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 1rem;">{{ account.description|truncatewords:15 }}</p>
+            {% endif %}
+            <div style="font-size: 0.85rem; opacity: 0.8;">
+                Creada: {{ account.created_at|date:"d/m/Y" }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">💳</div>
+        <h3>No hay cuentas registradas</h3>
+        <p>Crea tu primera cuenta para comenzar a gestionar tus finanzas.</p>
+        <a href="{% url 'account_create' %}" class="btn btn-primary" style="margin-top: 1rem;">+ Nueva Cuenta</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
