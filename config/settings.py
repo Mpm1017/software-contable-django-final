@@ -31,6 +31,26 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
+
+# ************************************************
+# CONFIGURACIÓN DE SEGURIDAD PARA PRODUCCIÓN
+# ************************************************
+# Estas configuraciones solo se aplican cuando DEBUG=False (producción)
+if not DEBUG:
+    # Forzar HTTPS
+    SECURE_SSL_REDIRECT = True
+    # Cookies seguras
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    # Protección XSS
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    # Protección contra clickjacking
+    X_FRAME_OPTIONS = 'DENY'
+    # HSTS (HTTP Strict Transport Security)
+    SECURE_HSTS_SECONDS = 31536000  # 1 año
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 # ************************************************
 
 

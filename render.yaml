@@ -1,0 +1,35 @@
+services:
+  # Base de datos PostgreSQL
+  - type: pserv
+    name: software-contable-db
+    env: python
+    plan: free
+    databaseName: software_contable
+    databaseUser: software_contable_user
+
+  # Aplicación Web Django
+  - type: web
+    name: software-contable-django
+    env: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn config.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: DATABASE_URL
+        fromDatabase:
+          name: software-contable-db
+          property: connectionString
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        sync: false
