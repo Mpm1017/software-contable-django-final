@@ -1,0 +1,41 @@
+# Archivos y directorios a ignorar en el análisis de SonarQube
+
+# Migraciones de Django
+**/migrations/**
+
+# Entorno virtual
+venv/
+env/
+
+# Archivos estáticos
+staticfiles/
+static/
+
+# Templates HTML
+templates/
+
+# Cache de Python
+**/__pycache__/
+*.pyc
+*.pyo
+
+# Archivos de prueba temporal
+test_email.py
+set_admin_password.py
+
+# Base de datos SQLite
+*.sqlite3
+db.sqlite3
+
+# Archivos de configuración local
+.env
+*.log
+
+# Documentación
+*.md
+*.txt
+
+# Archivos de build
+build/
+dist/
+*.egg-info/

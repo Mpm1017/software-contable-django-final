@@ -3,6 +3,8 @@ venv/
 env/
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
 # Django specific
 *.log
@@ -21,3 +23,18 @@ config/settings/local.py
 .idea/
 *.swp
 *.swo
+
+# SonarQube
+.scannerwork/
+.sonar/
+
+# Archivos de prueba (no deben estar en producción)
+test_email.py
+set_admin_password.py
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
