@@ -91,7 +91,7 @@ class TransactionAdmin(admin.ModelAdmin):
             from django.contrib import messages
             messages.error(
                 request,
-                f'El tipo de transacción debe coincidir con el tipo de categoría.'
+                'El tipo de transacción debe coincidir con el tipo de categoría.'
             )
             return
         super().save_model(request, obj, form, change)
