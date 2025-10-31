@@ -47,7 +47,6 @@ class Account(models.Model):
     )
     description = models.TextField(
         blank=True,
-        null=True,
         verbose_name=VERBOSE_NAME_DESCRIPCION
     )
     created_at = models.DateTimeField(
@@ -99,7 +98,6 @@ class Category(models.Model):
     )
     description = models.TextField(
         blank=True,
-        null=True,
         verbose_name=VERBOSE_NAME_DESCRIPCION
     )
     color = models.CharField(
@@ -172,7 +170,6 @@ class Transaction(models.Model):
     )
     notes = models.TextField(
         blank=True,
-        null=True,
         verbose_name='Notas Adicionales'
     )
     transaction_date = models.DateField(
