@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib import messages
+from django.contrib.messages import get_messages
 from rest_framework_simplejwt.tokens import RefreshToken
 from .forms import RegisterForm
 
@@ -173,10 +174,18 @@ def custom_logout(request):
         del request.session['access_token']
     if 'refresh_token' in request.session:
         del request.session['refresh_token']
+    if 'user_role' in request.session:
+        del request.session['user_role']
+    
+    # Limpiar todos los mensajes anteriores
+    storage = get_messages(request)
+    for _ in storage:
+        pass  # Esto consume/limpia todos los mensajes
     
     # Logout tradicional de Django
     auth_logout(request)
     
+    # Agregar solo el mensaje de logout
     messages.success(request, '¡Has cerrado sesión exitosamente!')
     
-    return redirect('login')
+    return redirect('user_login')

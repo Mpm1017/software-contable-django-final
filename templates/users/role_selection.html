@@ -151,6 +151,33 @@
             text-decoration: underline;
         }
         
+        .messages {
+            margin-bottom: 2rem;
+        }
+        
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .alert-success {
+            border-left: 5px solid #28a745;
+            color: #155724;
+        }
+        
+        .alert-error {
+            border-left: 5px solid #dc3545;
+            color: #721c24;
+        }
+        
+        .alert-info {
+            border-left: 5px solid #17a2b8;
+            color: #0c5460;
+        }
+        
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2rem;
@@ -168,6 +195,16 @@
             <h1>💼 Software Contable</h1>
             <p>Selecciona cómo deseas ingresar al sistema</p>
         </div>
+        
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
         
         <div class="role-cards">
             <!-- Tarjeta Usuario Normal -->
