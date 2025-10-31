@@ -7,6 +7,9 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 from decimal import Decimal
 
+# Constantes para verbose_name
+VERBOSE_NAME_DESCRIPCION = 'Descripción'
+
 
 class Account(models.Model):
     """
@@ -45,7 +48,7 @@ class Account(models.Model):
     description = models.TextField(
         blank=True,
         null=True,
-        verbose_name='Descripción'
+        verbose_name=VERBOSE_NAME_DESCRIPCION
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -97,7 +100,7 @@ class Category(models.Model):
     description = models.TextField(
         blank=True,
         null=True,
-        verbose_name='Descripción'
+        verbose_name=VERBOSE_NAME_DESCRIPCION
     )
     color = models.CharField(
         max_length=7,
@@ -165,7 +168,7 @@ class Transaction(models.Model):
     )
     description = models.CharField(
         max_length=255,
-        verbose_name='Descripción'
+        verbose_name=VERBOSE_NAME_DESCRIPCION
     )
     notes = models.TextField(
         blank=True,
