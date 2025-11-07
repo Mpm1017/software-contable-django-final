@@ -118,6 +118,14 @@ DATABASES = {
     )
 }
 
+# Configuración adicional para PostgreSQL en producción
+if not DEBUG and 'postgresql' in DATABASES['default']['ENGINE']:
+    DATABASES['default']['CONN_MAX_AGE'] = 600  # Mantener conexiones por 10 minutos
+    DATABASES['default']['OPTIONS'] = {
+        'connect_timeout': 10,
+        'options': '-c statement_timeout=30000'  # 30 segundos timeout
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
