@@ -1,6 +1,6 @@
-# 🎯 Sistema de Roles Implementado
+#  Sistema de Roles Implementado
 
-## ✅ COMPLETADO
+## COMPLETADO
 
 ### 1. Vista de Selección de Rol (Página Inicial)
 
@@ -8,8 +8,8 @@
 
 **Funcionalidad:**
 - Pantalla inicial que muestra dos opciones:
-  - 👤 **Usuario** - Acceso estándar
-  - 👨‍💼 **Administrador** - Acceso completo
+  -  **Usuario** - Acceso estándar
+  -  **Administrador** - Acceso completo
 
 **Características:**
 - Diseño moderno con gradientes
@@ -26,20 +26,20 @@
 **URL:** `/login/user/`
 
 **Validaciones:**
-- ✅ Solo permite acceso a usuarios NO administradores
-- ✅ Si un admin intenta entrar, muestra error
-- ✅ Genera tokens JWT al autenticar
-- ✅ Redirige a dashboard de usuario
+- Solo permite acceso a usuarios NO administradores
+- Si un admin intenta entrar, muestra error
+- Genera tokens JWT al autenticar
+- Redirige a dashboard de usuario
 
 #### **Login de Administrador**
 **Archivo:** `templates/registration/admin_login.html`
 **URL:** `/login/admin/`
 
 **Validaciones:**
-- ✅ Solo permite acceso a usuarios con `is_staff` o `is_superuser`
-- ✅ Si un usuario normal intenta entrar, muestra error
-- ✅ Genera tokens JWT al autenticar
-- ✅ Redirige a dashboard de administrador
+-  Solo permite acceso a usuarios con `is_staff` o `is_superuser`
+-  Si un usuario normal intenta entrar, muestra error
+-  Genera tokens JWT al autenticar
+-  Redirige a dashboard de administrador
 
 ---
 
@@ -50,12 +50,12 @@
 **URL:** `/dashboard/user/`
 
 **Funcionalidades Limitadas:**
-- ✅ Mis Transacciones personales
-- ✅ Mis Cuentas
-- ✅ Categorías
-- ✅ Reportes personales
-- ❌ NO tiene acceso a gestión de usuarios
-- ❌ NO tiene acceso a configuración del sistema
+-  Mis Transacciones personales
+-  Mis Cuentas
+- Categorías
+-  Reportes personales
+-  NO tiene acceso a gestión de usuarios
+-  NO tiene acceso a configuración del sistema
 
 **Diseño:**
 - Navbar con gradiente azul/púrpura
@@ -67,14 +67,14 @@
 **URL:** `/dashboard/admin/`
 
 **Funcionalidades Completas:**
-- ✅ Todas las funciones de usuario
-- ✅ Gestión de Usuarios del sistema
-- ✅ Plan de Cuentas completo
-- ✅ Asientos Contables globales
-- ✅ Reportes Financieros del sistema
-- ✅ Auditoría y logs
-- ✅ Configuración del sistema
-- ✅ Acceso al admin de Django
+-  Todas las funciones de usuario
+-  Gestión de Usuarios del sistema
+-  Plan de Cuentas completo
+-  Asientos Contables globales
+-  Reportes Financieros del sistema
+-  Auditoría y logs
+- Configuración del sistema
+- Acceso al admin de Django
 
 **Estadísticas:**
 - Total de usuarios
@@ -166,7 +166,7 @@ urlpatterns = [
 
 ---
 
-## 🔒 Seguridad Implementada
+##  Seguridad Implementada
 
 ### Validaciones de Rol:
 
@@ -185,13 +185,13 @@ urlpatterns = [
 
 ### Protección de Rutas:
 
-- ✅ Todos los dashboards requieren `@login_required`
-- ✅ Verificación de `is_staff` o `is_superuser` para admin
-- ✅ Redirección automática según permisos
+-  Todos los dashboards requieren `@login_required`
+-  Verificación de `is_staff` o `is_superuser` para admin
+-  Redirección automática según permisos
 
 ---
 
-## 🎨 Diseño y UX
+##  Diseño y UX
 
 ### Colores por Rol:
 
