@@ -1,0 +1,52 @@
+{% extends 'accounting/base.html' %}
+
+{% block title %}Asientos Contables - Administrador{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>📝 Asientos Contables del Sistema</h2>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">← Volver</a>
+    </div>
+    
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem; border-radius: 10px; color: white; margin-bottom: 2rem;">
+        <div style="font-size: 2rem; font-weight: bold;">{{ total_asientos }}</div>
+        <div style="opacity: 0.9;">Total de Asientos Contables</div>
+    </div>
+
+    {% if asientos %}
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <tr>
+                    <th style="padding: 1rem; text-align: left;">Número</th>
+                    <th style="padding: 1rem; text-align: left;">Fecha</th>
+                    <th style="padding: 1rem; text-align: left;">Descripción</th>
+                    <th style="padding: 1rem; text-align: left;">Usuario</th>
+                    <th style="padding: 1rem; text-align: left;">Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for asiento in asientos %}
+                <tr style="border-bottom: 1px solid #e0e0e0;">
+                    <td style="padding: 1rem;"><strong>#{{ asiento.numero }}</strong></td>
+                    <td style="padding: 1rem;">{{ asiento.fecha|date:"d/m/Y" }}</td>
+                    <td style="padding: 1rem;">{{ asiento.descripcion|truncatewords:10 }}</td>
+                    <td style="padding: 1rem;">{{ asiento.usuario.username }}</td>
+                    <td style="padding: 1rem;">
+                        <span style="background: #d4edda; color: #155724; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem;">Registrado</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">📝</div>
+        <h3>No hay asientos contables</h3>
+        <p>Aún no se han registrado asientos contables en el sistema.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

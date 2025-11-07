@@ -1,0 +1,67 @@
+{% extends 'accounting/base.html' %}
+
+{% block title %}Auditoría - Administrador{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>🔍 Auditoría del Sistema</h2>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">← Volver</a>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem; border-radius: 10px; color: white;">
+            <div style="font-size: 2rem; font-weight: bold;">{{ total_usuarios }}</div>
+            <div style="opacity: 0.9;">Total Usuarios</div>
+        </div>
+        <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 1.5rem; border-radius: 10px; color: white;">
+            <div style="font-size: 2rem; font-weight: bold;">{{ usuarios_activos }}</div>
+            <div style="opacity: 0.9;">Usuarios Activos</div>
+        </div>
+        <div style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); padding: 1.5rem; border-radius: 10px; color: white;">
+            <div style="font-size: 2rem; font-weight: bold;">{{ total_transacciones }}</div>
+            <div style="opacity: 0.9;">Transacciones</div>
+        </div>
+    </div>
+
+    <h3 style="margin: 2rem 0 1rem 0;">📋 Últimas 100 Actividades</h3>
+    {% if logs %}
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+            <thead style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <tr>
+                    <th style="padding: 0.75rem; text-align: left;">Fecha/Hora</th>
+                    <th style="padding: 0.75rem; text-align: left;">Usuario</th>
+                    <th style="padding: 0.75rem; text-align: left;">Acción</th>
+                    <th style="padding: 0.75rem; text-align: left;">Objeto</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr style="border-bottom: 1px solid #e0e0e0;">
+                    <td style="padding: 0.75rem;">{{ log.action_time|date:"d/m/Y H:i" }}</td>
+                    <td style="padding: 0.75rem;">{{ log.user.username }}</td>
+                    <td style="padding: 0.75rem;">
+                        {% if log.action_flag == 1 %}
+                        <span style="background: #d4edda; color: #155724; padding: 0.25rem 0.5rem; border-radius: 15px; font-size: 0.8rem;">Creación</span>
+                        {% elif log.action_flag == 2 %}
+                        <span style="background: #fff3cd; color: #856404; padding: 0.25rem 0.5rem; border-radius: 15px; font-size: 0.8rem;">Modificación</span>
+                        {% elif log.action_flag == 3 %}
+                        <span style="background: #f8d7da; color: #721c24; padding: 0.25rem 0.5rem; border-radius: 15px; font-size: 0.8rem;">Eliminación</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 0.75rem;">{{ log.object_repr|truncatewords:8 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">🔍</div>
+        <h3>No hay registros de auditoría</h3>
+        <p>Aún no se han registrado actividades en el sistema.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

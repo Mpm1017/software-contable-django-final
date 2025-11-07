@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Sum, Q
-from .models import Transaction, Account, Category
+from django.contrib.auth.models import User
+from django.contrib.admin.models import LogEntry
+from .models import Transaction, Account, Category, AsientoContable, CuentaContable
 from .forms import TransactionForm, AccountForm, CategoryForm
 
 
@@ -192,3 +194,129 @@ def category_create(request):
     }
     
     return render(request, 'accounting/category_form.html', context)
+
+
+# ================================================
+# VISTAS ADMINISTRATIVAS
+# ================================================
+
+@login_required
+def admin_plan_cuentas(request):
+    """
+    Vista para administradores: Plan de Cuentas completo del sistema.
+    """
+    # Verificar que sea administrador
+    if not (request.user.is_staff or request.user.is_superuser):
+        messages.error(request, 'No tienes permisos para acceder a esta sección.')
+        return redirect('user_dashboard')
+    
+    # Obtener todas las cuentas contables del sistema
+    cuentas = CuentaContable.objects.all().order_by('codigo')
+    
+    # Estadísticas
+    total_cuentas = cuentas.count()
+    cuentas_activas = cuentas.filter(activa=True).count()
+    
+    context = {
+        'cuentas': cuentas,
+        'total_cuentas': total_cuentas,
+        'cuentas_activas': cuentas_activas,
+    }
+    
+    return render(request, 'accounting/admin_plan_cuentas.html', context)
+
+
+@login_required
+def admin_asientos_contables(request):
+    """
+    Vista para administradores: Ver todos los asientos contables del sistema.
+    """
+    # Verificar que sea administrador
+    if not (request.user.is_staff or request.user.is_superuser):
+        messages.error(request, 'No tienes permisos para acceder a esta sección.')
+        return redirect('user_dashboard')
+    
+    # Obtener todos los asientos contables
+    asientos = AsientoContable.objects.all().order_by('-fecha', '-numero')
+    
+    # Filtros opcionales
+    usuario_id = request.GET.get('usuario')
+    if usuario_id:
+        asientos = asientos.filter(usuario_id=usuario_id)
+    
+    # Estadísticas
+    total_asientos = asientos.count()
+    usuarios = User.objects.filter(is_staff=False)
+    
+    context = {
+        'asientos': asientos,
+        'total_asientos': total_asientos,
+        'usuarios': usuarios,
+    }
+    
+    return render(request, 'accounting/admin_asientos.html', context)
+
+
+@login_required
+def admin_reportes_financieros(request):
+    """
+    Vista para administradores: Reportes financieros globales del sistema.
+    """
+    # Verificar que sea administrador
+    if not (request.user.is_staff or request.user.is_superuser):
+        messages.error(request, 'No tienes permisos para acceder a esta sección.')
+        return redirect('user_dashboard')
+    
+    # Calcular totales globales
+    total_ingresos = Transaction.objects.filter(transaction_type='INCOME').aggregate(total=Sum('amount'))['total'] or 0
+    total_gastos = Transaction.objects.filter(transaction_type='EXPENSE').aggregate(total=Sum('amount'))['total'] or 0
+    balance_general = total_ingresos - total_gastos
+    
+    # Transacciones por usuario
+    usuarios_stats = []
+    for user in User.objects.filter(is_staff=False):
+        user_income = Transaction.objects.filter(user=user, transaction_type='INCOME').aggregate(total=Sum('amount'))['total'] or 0
+        user_expense = Transaction.objects.filter(user=user, transaction_type='EXPENSE').aggregate(total=Sum('amount'))['total'] or 0
+        usuarios_stats.append({
+            'usuario': user.username,
+            'ingresos': user_income,
+            'gastos': user_expense,
+            'balance': user_income - user_expense
+        })
+    
+    context = {
+        'total_ingresos': total_ingresos,
+        'total_gastos': total_gastos,
+        'balance_general': balance_general,
+        'usuarios_stats': usuarios_stats,
+    }
+    
+    return render(request, 'accounting/admin_reportes.html', context)
+
+
+@login_required
+def admin_auditoria(request):
+    """
+    Vista para administradores: Auditoría y logs del sistema.
+    """
+    # Verificar que sea administrador
+    if not (request.user.is_staff or request.user.is_superuser):
+        messages.error(request, 'No tienes permisos para acceder a esta sección.')
+        return redirect('user_dashboard')
+    
+    # Obtener logs de Django Admin
+    logs = LogEntry.objects.all().order_by('-action_time')[:100]
+    
+    # Estadísticas de actividad
+    total_usuarios = User.objects.count()
+    usuarios_activos = User.objects.filter(is_active=True).count()
+    total_transacciones = Transaction.objects.count()
+    
+    context = {
+        'logs': logs,
+        'total_usuarios': total_usuarios,
+        'usuarios_activos': usuarios_activos,
+        'total_transacciones': total_transacciones,
+    }
+    
+    return render(request, 'accounting/admin_auditoria.html', context)

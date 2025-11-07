@@ -1,0 +1,59 @@
+{% extends 'accounting/base.html' %}
+
+{% block title %}Reportes Financieros - Administrador{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>📊 Reportes Financieros Globales</h2>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">← Volver</a>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+        <div style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); padding: 1.5rem; border-radius: 10px; color: white;">
+            <div style="font-size: 2rem; font-weight: bold;">${{ total_ingresos|floatformat:2 }}</div>
+            <div style="opacity: 0.9;">Total Ingresos</div>
+        </div>
+        <div style="background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%); padding: 1.5rem; border-radius: 10px; color: white;">
+            <div style="font-size: 2rem; font-weight: bold;">${{ total_gastos|floatformat:2 }}</div>
+            <div style="opacity: 0.9;">Total Gastos</div>
+        </div>
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem; border-radius: 10px; color: white;">
+            <div style="font-size: 2rem; font-weight: bold;">${{ balance_general|floatformat:2 }}</div>
+            <div style="opacity: 0.9;">Balance General</div>
+        </div>
+    </div>
+
+    <h3 style="margin: 2rem 0 1rem 0;">📈 Resumen por Usuario</h3>
+    {% if usuarios_stats %}
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <tr>
+                    <th style="padding: 1rem; text-align: left;">Usuario</th>
+                    <th style="padding: 1rem; text-align: right;">Ingresos</th>
+                    <th style="padding: 1rem; text-align: right;">Gastos</th>
+                    <th style="padding: 1rem; text-align: right;">Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stat in usuarios_stats %}
+                <tr style="border-bottom: 1px solid #e0e0e0;">
+                    <td style="padding: 1rem;">{{ stat.usuario }}</td>
+                    <td style="padding: 1rem; text-align: right; color: #28a745;">${{ stat.ingresos|floatformat:2 }}</td>
+                    <td style="padding: 1rem; text-align: right; color: #dc3545;">${{ stat.gastos|floatformat:2 }}</td>
+                    <td style="padding: 1rem; text-align: right; font-weight: bold;">${{ stat.balance|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">📊</div>
+        <h3>No hay datos disponibles</h3>
+        <p>Aún no hay transacciones registradas en el sistema.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

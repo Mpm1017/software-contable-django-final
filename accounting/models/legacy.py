@@ -17,10 +17,11 @@ class Account(models.Model):
     Cada usuario puede tener múltiples cuentas.
     """
     ACCOUNT_TYPES = [
-        ('BANK', 'Cuenta Bancaria'),
         ('CASH', 'Efectivo'),
         ('CREDIT', 'Tarjeta de Crédito'),
-        ('SAVINGS', 'Cuenta de Ahorros'),
+        ('DEBIT', 'Tarjeta de Débito'),
+        ('BANK', 'Cuenta Ahorros'),
+        ('SAVINGS', 'Cuenta Corriente'),
     ]
     
     user = models.ForeignKey(
@@ -36,7 +37,7 @@ class Account(models.Model):
     account_type = models.CharField(
         max_length=10,
         choices=ACCOUNT_TYPES,
-        default='BANK',
+        default='CASH',
         verbose_name='Tipo de Cuenta'
     )
     balance = models.DecimalField(

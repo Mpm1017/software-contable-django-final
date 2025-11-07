@@ -1,0 +1,62 @@
+{% extends 'accounting/base.html' %}
+
+{% block title %}Plan de Cuentas - Administrador{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>🏬 Plan de Cuentas Completo</h2>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">← Volver</a>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem; border-radius: 10px; color: white;">
+            <div style="font-size: 2rem; font-weight: bold;">{{ total_cuentas }}</div>
+            <div style="opacity: 0.9;">Total de Cuentas</div>
+        </div>
+        <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 1.5rem; border-radius: 10px; color: white;">
+            <div style="font-size: 2rem; font-weight: bold;">{{ cuentas_activas }}</div>
+            <div style="opacity: 0.9;">Cuentas Activas</div>
+        </div>
+    </div>
+
+    {% if cuentas %}
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <tr>
+                    <th style="padding: 1rem; text-align: left;">Código</th>
+                    <th style="padding: 1rem; text-align: left;">Nombre</th>
+                    <th style="padding: 1rem; text-align: left;">Tipo</th>
+                    <th style="padding: 1rem; text-align: left;">Naturaleza</th>
+                    <th style="padding: 1rem; text-align: left;">Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cuenta in cuentas %}
+                <tr style="border-bottom: 1px solid #e0e0e0;">
+                    <td style="padding: 1rem;"><strong>{{ cuenta.codigo }}</strong></td>
+                    <td style="padding: 1rem;">{{ cuenta.nombre }}</td>
+                    <td style="padding: 1rem;">{{ cuenta.get_tipo_display }}</td>
+                    <td style="padding: 1rem;">{{ cuenta.get_naturaleza_display }}</td>
+                    <td style="padding: 1rem;">
+                        {% if cuenta.activa %}
+                        <span style="background: #d4edda; color: #155724; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem;">Activa</span>
+                        {% else %}
+                        <span style="background: #f8d7da; color: #721c24; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem;">Inactiva</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">📊</div>
+        <h3>No hay cuentas registradas</h3>
+        <p>Aún no se han creado cuentas contables en el sistema.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

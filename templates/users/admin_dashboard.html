@@ -257,35 +257,35 @@
             </div>
 
             <!-- Plan de Cuentas -->
-            <div class="card">
-                <div class="card-icon">🏦</div>
+            <div class="card" onclick="window.location.href='{% url 'admin_plan_cuentas' %}'">
+                <div class="card-icon">🏬</div>
                 <h3>Plan de Cuentas</h3>
                 <p>Configurar y gestionar el plan de cuentas contable completo.</p>
-                <span class="card-link">Configurar plan →</span>
+                <a href="{% url 'admin_plan_cuentas' %}" class="card-link">Configurar plan →</a>
             </div>
 
             <!-- Asientos Contables -->
-            <div class="card">
+            <div class="card" onclick="window.location.href='{% url 'admin_asientos' %}'">
                 <div class="card-icon">📝</div>
                 <h3>Asientos Contables</h3>
                 <p>Ver y gestionar todos los asientos contables del sistema.</p>
-                <span class="card-link">Ver asientos →</span>
+                <a href="{% url 'admin_asientos' %}" class="card-link">Ver asientos →</a>
             </div>
 
             <!-- Reportes Globales -->
-            <div class="card">
+            <div class="card" onclick="window.location.href='{% url 'admin_reportes' %}'">
                 <div class="card-icon">📊</div>
                 <h3>Reportes Financieros</h3>
                 <p>Balance General, Estado de Resultados y más reportes.</p>
-                <span class="card-link">Ver reportes →</span>
+                <a href="{% url 'admin_reportes' %}" class="card-link">Ver reportes →</a>
             </div>
 
             <!-- Auditoría -->
-            <div class="card">
+            <div class="card" onclick="window.location.href='{% url 'admin_auditoria' %}'">
                 <div class="card-icon">🔍</div>
                 <h3>Auditoría</h3>
                 <p>Revisar logs y actividad del sistema para control.</p>
-                <span class="card-link">Ver auditoría →</span>
+                <a href="{% url 'admin_auditoria' %}" class="card-link">Ver auditoría →</a>
             </div>
 
             <!-- Configuración -->

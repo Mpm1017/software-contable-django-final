@@ -15,4 +15,10 @@ urlpatterns = [
     # URLs de Categorías
     path('categories/', views.category_list, name='category_list'),
     path('categories/create/', views.category_create, name='category_create'),
+    
+    # URLs Administrativas
+    path('admin/plan-cuentas/', views.admin_plan_cuentas, name='admin_plan_cuentas'),
+    path('admin/asientos/', views.admin_asientos_contables, name='admin_asientos'),
+    path('admin/reportes/', views.admin_reportes_financieros, name='admin_reportes'),
+    path('admin/auditoria/', views.admin_auditoria, name='admin_auditoria'),
 ]
