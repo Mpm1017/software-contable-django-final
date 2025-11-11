@@ -226,8 +226,8 @@ def custom_logout(request):
 def admin_user_management(request):
     """Vista para gestionar usuarios (solo administradores)"""
     if not (request.user.is_staff or request.user.is_superuser):
-        messages.error(request, 'No tienes permisos para acceder a esta sección.')
-        return redirect('user_dashboard')
+        messages.error(request, MSG_NO_PERMISOS)
+        return redirect(DASHBOARD_USER)
     
     users = User.objects.all().order_by('-date_joined')
     
@@ -245,8 +245,8 @@ def admin_user_management(request):
 def admin_user_edit(request, user_id):
     """Vista para editar un usuario"""
     if not (request.user.is_staff or request.user.is_superuser):
-        messages.error(request, 'No tienes permisos para acceder a esta sección.')
-        return redirect('user_dashboard')
+        messages.error(request, MSG_NO_PERMISOS)
+        return redirect(DASHBOARD_USER)
     
     user_to_edit = get_object_or_404(User, id=user_id)
     
@@ -279,8 +279,8 @@ def admin_user_edit(request, user_id):
 def admin_user_delete(request, user_id):
     """Vista para eliminar un usuario"""
     if not (request.user.is_staff or request.user.is_superuser):
-        messages.error(request, 'No tienes permisos para acceder a esta sección.')
-        return redirect('user_dashboard')
+        messages.error(request, MSG_NO_PERMISOS)
+        return redirect(DASHBOARD_USER)
     
     user_to_delete = get_object_or_404(User, id=user_id)
     
@@ -306,8 +306,8 @@ def admin_user_delete(request, user_id):
 def admin_config(request):
     """Vista de configuración del sistema (admin)"""
     if not (request.user.is_staff or request.user.is_superuser):
-        messages.error(request, 'No tienes permisos para acceder a esta sección.')
-        return redirect('user_dashboard')
+        messages.error(request, MSG_NO_PERMISOS)
+        return redirect(DASHBOARD_USER)
     
     from accounting.models import Transaction, Account, Category
     
