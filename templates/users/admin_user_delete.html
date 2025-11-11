@@ -1,0 +1,38 @@
+{% extends 'users/base.html' %}
+
+{% block title %}Eliminar Usuario{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>🗑️ Eliminar Usuario</h2>
+        <a href="{% url 'admin_user_management' %}" class="btn btn-secondary">← Volver</a>
+    </div>
+    
+    <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
+        <h3 style="color: #856404; margin-bottom: 1rem;">⚠️ Advertencia</h3>
+        <p style="color: #856404; margin-bottom: 0;">
+            Estás a punto de eliminar al usuario <strong>{{ user_to_delete.username }}</strong>. 
+            Esta acción es permanente y eliminará todos los datos asociados a este usuario.
+        </p>
+    </div>
+    
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
+        <h4>Información del Usuario:</h4>
+        <p><strong>Usuario:</strong> {{ user_to_delete.username }}</p>
+        <p><strong>Email:</strong> {{ user_to_delete.email|default:"Sin email" }}</p>
+        <p><strong>Nombre:</strong> {{ user_to_delete.get_full_name|default:"Sin nombre" }}</p>
+        <p><strong>Fecha de registro:</strong> {{ user_to_delete.date_joined|date:"d/m/Y H:i" }}</p>
+    </div>
+    
+    <form method="POST">
+        {% csrf_token %}
+        <div style="display: flex; gap: 1rem;">
+            <button type="submit" style="background: #dc3545; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                🗑️ Sí, Eliminar Usuario
+            </button>
+            <a href="{% url 'admin_user_management' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

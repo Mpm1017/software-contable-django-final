@@ -52,8 +52,18 @@ class TransactionForm(forms.ModelForm):
         
         # Filtramos las cuentas y categorías para mostrar solo las del usuario actual
         if self.user:
+            from .utils import obtener_categorias_con_predeterminadas
+            
             self.fields['account'].queryset = Account.objects.filter(user=self.user, is_active=True)
-            self.fields['category'].queryset = Category.objects.filter(user=self.user, is_active=True)
+            # Usar función que asegura categorías predeterminadas
+            self.fields['category'].queryset = obtener_categorias_con_predeterminadas(self.user)
+            
+            # Agregar mensaje de ayuda para categorías personalizadas
+            self.fields['category'].help_text = (
+                'Selecciona una categoría. '
+                'Si necesitas crear una categoría personalizada, '
+                've a la sección de Categorías en el menú.'
+            )
     
     def clean(self):
         cleaned_data = super().clean()

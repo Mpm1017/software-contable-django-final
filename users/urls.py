@@ -23,4 +23,10 @@ urlpatterns = [
     
     # Registro
     path('register/', views.register, name='register'),
+    
+    # Gestión de usuarios (admin)
+    path('management/users/', views.admin_user_management, name='admin_user_management'),
+    path('management/users/<int:user_id>/edit/', views.admin_user_edit, name='admin_user_edit'),
+    path('management/users/<int:user_id>/delete/', views.admin_user_delete, name='admin_user_delete'),
+    path('management/config/', views.admin_config, name='admin_config'),
 ]

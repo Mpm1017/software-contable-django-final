@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib import messages
 from django.contrib.messages import get_messages
+from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from .forms import RegisterForm
 
@@ -64,7 +65,6 @@ def admin_dashboard(request):
     refresh_token = request.session.get('refresh_token', None)
     
     # Estadísticas para admin
-    from django.contrib.auth.models import User
     from accounting.models import AsientoContable, CuentaContable
     
     total_usuarios = User.objects.count()
@@ -88,8 +88,23 @@ def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, '¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.')
+            # Guardar el nuevo usuario
+            user = form.save()
+            
+            # Crear categorías predeterminadas para el nuevo usuario
+            from accounting.utils import crear_categorias_predeterminadas
+            try:
+                categorias_creadas = crear_categorias_predeterminadas(user)
+                messages.success(
+                    request, 
+                    f'¡Cuenta creada exitosamente! Se han creado {categorias_creadas} categorías predeterminadas para ti. Ahora puedes iniciar sesión.'
+                )
+            except Exception:
+                messages.success(
+                    request,
+                    '¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.'
+                )
+            
             return redirect('login') 
     else:
         form = RegisterForm()
@@ -189,3 +204,111 @@ def custom_logout(request):
     messages.success(request, '¡Has cerrado sesión exitosamente!')
     
     return redirect('user_login')
+
+
+# ================================================
+# GESTIÓN DE USUARIOS (ADMIN)
+# ================================================
+
+@login_required
+def admin_user_management(request):
+    """Vista para gestionar usuarios (solo administradores)"""
+    if not (request.user.is_staff or request.user.is_superuser):
+        messages.error(request, 'No tienes permisos para acceder a esta sección.')
+        return redirect('user_dashboard')
+    
+    users = User.objects.all().order_by('-date_joined')
+    
+    context = {
+        'users': users,
+        'total_users': users.count(),
+        'active_users': users.filter(is_active=True).count(),
+        'admin_users': users.filter(is_staff=True).count(),
+    }
+    
+    return render(request, 'users/admin_user_management.html', context)
+
+
+@login_required
+def admin_user_edit(request, user_id):
+    """Vista para editar un usuario"""
+    if not (request.user.is_staff or request.user.is_superuser):
+        messages.error(request, 'No tienes permisos para acceder a esta sección.')
+        return redirect('user_dashboard')
+    
+    user_to_edit = get_object_or_404(User, id=user_id)
+    
+    if request.method == 'POST':
+        # Actualizar datos del usuario
+        user_to_edit.username = request.POST.get('username')
+        user_to_edit.email = request.POST.get('email')
+        user_to_edit.first_name = request.POST.get('first_name')
+        user_to_edit.last_name = request.POST.get('last_name')
+        user_to_edit.is_active = request.POST.get('is_active') == 'on'
+        # is_staff se gestiona desde la terminal con manage.py createsuperuser
+        
+        # Cambiar contraseña si se proporciona
+        new_password = request.POST.get('new_password')
+        if new_password:
+            user_to_edit.set_password(new_password)
+        
+        user_to_edit.save()
+        messages.success(request, f'Usuario {user_to_edit.username} actualizado exitosamente.')
+        return redirect('admin_user_management')
+    
+    context = {
+        'user_to_edit': user_to_edit,
+    }
+    
+    return render(request, 'users/admin_user_edit.html', context)
+
+
+@login_required
+def admin_user_delete(request, user_id):
+    """Vista para eliminar un usuario"""
+    if not (request.user.is_staff or request.user.is_superuser):
+        messages.error(request, 'No tienes permisos para acceder a esta sección.')
+        return redirect('user_dashboard')
+    
+    user_to_delete = get_object_or_404(User, id=user_id)
+    
+    # No permitir que se elimine a sí mismo
+    if user_to_delete == request.user:
+        messages.error(request, 'No puedes eliminar tu propia cuenta.')
+        return redirect('admin_user_management')
+    
+    if request.method == 'POST':
+        username = user_to_delete.username
+        user_to_delete.delete()
+        messages.success(request, f'Usuario {username} eliminado exitosamente.')
+        return redirect('admin_user_management')
+    
+    context = {
+        'user_to_delete': user_to_delete,
+    }
+    
+    return render(request, 'users/admin_user_delete.html', context)
+
+
+@login_required
+def admin_config(request):
+    """Vista de configuración del sistema (admin)"""
+    if not (request.user.is_staff or request.user.is_superuser):
+        messages.error(request, 'No tienes permisos para acceder a esta sección.')
+        return redirect('user_dashboard')
+    
+    from accounting.models import Transaction, Account, Category
+    
+    # Estadísticas del sistema
+    stats = {
+        'total_transactions': Transaction.objects.count(),
+        'total_accounts': Account.objects.count(),
+        'total_categories': Category.objects.count(),
+        'total_users': User.objects.count(),
+    }
+    
+    context = {
+        'stats': stats,
+    }
+    
+    return render(request, 'users/admin_config.html', context)

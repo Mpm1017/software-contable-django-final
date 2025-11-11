@@ -1,0 +1,59 @@
+{% extends 'users/base.html' %}
+
+{% block title %}Editar Usuario{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>✏️ Editar Usuario: {{ user_to_edit.username }}</h2>
+        <a href="{% url 'admin_user_management' %}" class="btn btn-secondary">← Volver</a>
+    </div>
+    
+    <form method="POST" style="max-width: 600px;">
+        {% csrf_token %}
+        
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Nombre de Usuario</label>
+            <input type="text" name="username" value="{{ user_to_edit.username }}" required 
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px;">
+        </div>
+        
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Email</label>
+            <input type="email" name="email" value="{{ user_to_edit.email }}" 
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px;">
+        </div>
+        
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Nombre</label>
+            <input type="text" name="first_name" value="{{ user_to_edit.first_name }}" 
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px;">
+        </div>
+        
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Apellido</label>
+            <input type="text" name="last_name" value="{{ user_to_edit.last_name }}" 
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px;">
+        </div>
+        
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Nueva Contraseña (dejar vacío para no cambiar)</label>
+            <input type="password" name="new_password" 
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px;">
+        </div>
+        
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: flex; align-items: center; cursor: pointer;">
+                <input type="checkbox" name="is_active" {% if user_to_edit.is_active %}checked{% endif %}
+                       style="margin-right: 0.5rem; width: 20px; height: 20px;">
+                <span style="font-weight: bold;">Usuario Activo</span>
+            </label>
+        </div>
+        
+        <div style="display: flex; gap: 1rem;">
+            <button type="submit" class="btn btn-primary">💾 Guardar Cambios</button>
+            <a href="{% url 'admin_user_management' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

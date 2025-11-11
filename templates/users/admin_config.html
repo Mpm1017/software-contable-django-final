@@ -1,0 +1,45 @@
+{% extends 'users/base.html' %}
+
+{% block title %}Configuración del Sistema{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>⚙️ Configuración del Sistema</h2>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">← Volver al Dashboard</a>
+    </div>
+    
+    <h3 style="margin: 2rem 0 1rem 0;">📊 Estadísticas del Sistema</h3>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+        <div style="background: linear-gradient(135deg, #90e0ef 0%, #48cae4 100%); padding: 2rem; border-radius: 10px; color: white; text-align: center;">
+            <div style="font-size: 3rem; font-weight: bold;">{{ stats.total_users }}</div>
+            <div style="font-size: 1.2rem; opacity: 0.9;">Usuarios Registrados</div>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #06d6a0 0%, #1b9aaa 100%); padding: 2rem; border-radius: 10px; color: white; text-align: center;">
+            <div style="font-size: 3rem; font-weight: bold;">{{ stats.total_transactions }}</div>
+            <div style="font-size: 1.2rem; opacity: 0.9;">Transacciones</div>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #f72585 0%, #b5179e 100%); padding: 2rem; border-radius: 10px; color: white; text-align: center;">
+            <div style="font-size: 3rem; font-weight: bold;">{{ stats.total_accounts }}</div>
+            <div style="font-size: 1.2rem; opacity: 0.9;">Cuentas</div>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #7209b7 0%, #560bad 100%); padding: 2rem; border-radius: 10px; color: white; text-align: center;">
+            <div style="font-size: 3rem; font-weight: bold;">{{ stats.total_categories }}</div>
+            <div style="font-size: 1.2rem; opacity: 0.9;">Categorías</div>
+        </div>
+    </div>
+    
+    <h3 style="margin: 2rem 0 1rem 0;">🔧 Información del Sistema</h3>
+    
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px;">
+        <p><strong>Versión:</strong> 1.0.0</p>
+        <p><strong>Framework:</strong> Django 5.2.7</p>
+        <p><strong>Base de Datos:</strong> PostgreSQL (Neon)</p>
+        <p><strong>Servidor:</strong> Render</p>
+    </div>
+</div>
+{% endblock %}

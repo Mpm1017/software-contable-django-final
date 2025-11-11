@@ -249,27 +249,11 @@
         <h2 class="section-title">⚙️ Gestión del Sistema</h2>
         <div class="cards-grid">
             <!-- Gestión de Usuarios -->
-            <div class="card" onclick="window.location.href='/admin/auth/user/'">
+            <div class="card" onclick="window.location.href='{% url 'admin_user_management' %}'">
                 <div class="card-icon">👥</div>
                 <h3>Gestión de Usuarios</h3>
                 <p>Administrar usuarios, permisos y roles del sistema.</p>
-                <a href="/admin/auth/user/" class="card-link">Gestionar usuarios →</a>
-            </div>
-
-            <!-- Plan de Cuentas -->
-            <div class="card" onclick="window.location.href='{% url 'admin_plan_cuentas' %}'">
-                <div class="card-icon">🏬</div>
-                <h3>Plan de Cuentas</h3>
-                <p>Configurar y gestionar el plan de cuentas contable completo.</p>
-                <a href="{% url 'admin_plan_cuentas' %}" class="card-link">Configurar plan →</a>
-            </div>
-
-            <!-- Asientos Contables -->
-            <div class="card" onclick="window.location.href='{% url 'admin_asientos' %}'">
-                <div class="card-icon">📝</div>
-                <h3>Asientos Contables</h3>
-                <p>Ver y gestionar todos los asientos contables del sistema.</p>
-                <a href="{% url 'admin_asientos' %}" class="card-link">Ver asientos →</a>
+                <a href="{% url 'admin_user_management' %}" class="card-link">Gestionar usuarios →</a>
             </div>
 
             <!-- Reportes Globales -->
@@ -289,11 +273,11 @@
             </div>
 
             <!-- Configuración -->
-            <div class="card" onclick="window.location.href='/admin/'">
+            <div class="card" onclick="window.location.href='{% url 'admin_config' %}'">
                 <div class="card-icon">⚙️</div>
                 <h3>Configuración</h3>
-                <p>Acceso al panel de administración de Django.</p>
-                <a href="/admin/" class="card-link">Ir a admin →</a>
+                <p>Configuración del sistema y estadísticas generales.</p>
+                <a href="{% url 'admin_config' %}" class="card-link">Ir a configuración →</a>
             </div>
         </div>
 
