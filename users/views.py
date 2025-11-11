@@ -146,9 +146,9 @@ def user_login(request):
             # Login y JWT
             auth_login(request, user)
             refresh = RefreshToken.for_user(user)
-            request.session['access_token'] = str(refresh.access_token)
-            request.session['refresh_token'] = str(refresh)
-            request.session['user_role'] = 'user'
+            request.session[SESSION_ACCESS_TOKEN] = str(refresh.access_token)
+            request.session[SESSION_REFRESH_TOKEN] = str(refresh)
+            request.session[SESSION_USER_ROLE] = 'user'
             
             messages.success(request, f'¡Bienvenido, {user.username}!')
             return redirect('user_dashboard')
@@ -180,9 +180,9 @@ def admin_login(request):
             # Login y JWT
             auth_login(request, user)
             refresh = RefreshToken.for_user(user)
-            request.session['access_token'] = str(refresh.access_token)
-            request.session['refresh_token'] = str(refresh)
-            request.session['user_role'] = 'admin'
+            request.session[SESSION_ACCESS_TOKEN] = str(refresh.access_token)
+            request.session[SESSION_REFRESH_TOKEN] = str(refresh)
+            request.session[SESSION_USER_ROLE] = 'admin'
             
             messages.success(request, f'¡Bienvenido, Administrador {user.username}!')
             return redirect('admin_dashboard')
@@ -197,12 +197,12 @@ def custom_logout(request):
     Vista de logout personalizada que limpia los tokens JWT.
     """
     # Limpiamos los tokens de la sesión
-    if 'access_token' in request.session:
-        del request.session['access_token']
-    if 'refresh_token' in request.session:
-        del request.session['refresh_token']
-    if 'user_role' in request.session:
-        del request.session['user_role']
+    if SESSION_ACCESS_TOKEN in request.session:
+        del request.session[SESSION_ACCESS_TOKEN]
+    if SESSION_REFRESH_TOKEN in request.session:
+        del request.session[SESSION_REFRESH_TOKEN]
+    if SESSION_USER_ROLE in request.session:
+        del request.session[SESSION_USER_ROLE]
     
     # Limpiar todos los mensajes anteriores
     storage = get_messages(request)
