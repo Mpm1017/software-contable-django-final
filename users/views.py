@@ -141,7 +141,7 @@ def user_login(request):
             # Verificar que NO sea admin
             if user.is_staff or user.is_superuser:
                 messages.error(request, 'Esta área es solo para usuarios. Los administradores deben usar el login de administrador.')
-                return render(request, 'registration/user_login.html')
+                return render(request, TEMPLATE_USER_LOGIN)
             
             # Login y JWT
             auth_login(request, user)
@@ -155,7 +155,7 @@ def user_login(request):
         else:
             messages.error(request, 'Usuario o contraseña incorrectos.')
     
-    return render(request, 'registration/user_login.html')
+    return render(request, TEMPLATE_USER_LOGIN)
 
 
 def admin_login(request):
