@@ -151,9 +151,9 @@ def user_login(request):
             request.session[SESSION_USER_ROLE] = 'user'
             
             messages.success(request, f'¡Bienvenido, {user.username}!')
-            return redirect('user_dashboard')
+            return redirect(DASHBOARD_USER)
         else:
-            messages.error(request, 'Usuario o contraseña incorrectos.')
+            messages.error(request, MSG_CREDENCIALES_INCORRECTAS)
     
     return render(request, TEMPLATE_USER_LOGIN)
 
@@ -185,11 +185,11 @@ def admin_login(request):
             request.session[SESSION_USER_ROLE] = 'admin'
             
             messages.success(request, f'¡Bienvenido, Administrador {user.username}!')
-            return redirect('admin_dashboard')
+            return redirect(DASHBOARD_ADMIN)
         else:
-            messages.error(request, 'Usuario o contraseña incorrectos.')
+            messages.error(request, MSG_CREDENCIALES_INCORRECTAS)
     
-    return render(request, 'registration/admin_login.html')
+    return render(request, TEMPLATE_ADMIN_LOGIN)
 
 
 def custom_logout(request):
