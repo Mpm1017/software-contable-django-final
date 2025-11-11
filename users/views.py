@@ -7,6 +7,24 @@ from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from .forms import RegisterForm
 
+# Constantes para evitar duplicación de cadenas
+DASHBOARD_USER = 'user_dashboard'
+DASHBOARD_ADMIN = 'admin_dashboard'
+TEMPLATE_USER_LOGIN = 'registration/user_login.html'
+TEMPLATE_ADMIN_LOGIN = 'registration/admin_login.html'
+TEMPLATE_ADMIN_USER_MANAGEMENT = 'users/admin_user_management.html'
+TEMPLATE_ADMIN_USER_EDIT = 'users/admin_user_edit.html'
+TEMPLATE_ADMIN_USER_DELETE = 'users/admin_user_delete.html'
+TEMPLATE_ADMIN_CONFIG = 'users/admin_config.html'
+URL_ADMIN_USER_MANAGEMENT = 'admin_user_management'
+SESSION_ACCESS_TOKEN = 'access_token'
+SESSION_REFRESH_TOKEN = 'refresh_token'
+SESSION_USER_ROLE = 'user_role'
+POST_USERNAME = 'username'
+POST_PASSWORD = 'password'
+MSG_NO_PERMISOS = 'No tienes permisos para acceder a esta sección.'
+MSG_CREDENCIALES_INCORRECTAS = 'Usuario o contraseña incorrectos.'
+
 def index(request):
     """
     Vista inicial - Redirige según el estado de autenticación
@@ -14,9 +32,9 @@ def index(request):
     if request.user.is_authenticated:
         # Si es admin, va al dashboard de admin
         if request.user.is_staff or request.user.is_superuser:
-            return redirect('admin_dashboard')
+            return redirect(DASHBOARD_ADMIN)
         # Si es usuario normal, va al dashboard de usuario
-        return redirect('user_dashboard')
+        return redirect(DASHBOARD_USER)
     # Si NO está autenticado, muestra selección de rol
     return redirect('role_selection')
 
@@ -36,10 +54,10 @@ def user_dashboard(request):
     """
     # Verificar que NO sea admin
     if request.user.is_staff or request.user.is_superuser:
-        return redirect('admin_dashboard')
+        return redirect(DASHBOARD_ADMIN)
     
-    access_token = request.session.get('access_token', None)
-    refresh_token = request.session.get('refresh_token', None)
+    access_token = request.session.get(SESSION_ACCESS_TOKEN, None)
+    refresh_token = request.session.get(SESSION_REFRESH_TOKEN, None)
     
     context = {
         'username': request.user.username,
@@ -59,17 +77,13 @@ def admin_dashboard(request):
     """
     # Verificar que SÍ sea admin
     if not (request.user.is_staff or request.user.is_superuser):
-        return redirect('user_dashboard')
+        return redirect(DASHBOARD_USER)
     
-    access_token = request.session.get('access_token', None)
-    refresh_token = request.session.get('refresh_token', None)
+    access_token = request.session.get(SESSION_ACCESS_TOKEN, None)
+    refresh_token = request.session.get(SESSION_REFRESH_TOKEN, None)
     
     # Estadísticas para admin
-    from accounting.models import AsientoContable, CuentaContable
-    
     total_usuarios = User.objects.count()
-    total_asientos = AsientoContable.objects.count()
-    total_cuentas = CuentaContable.objects.count()
     
     context = {
         'username': request.user.username,
@@ -78,8 +92,6 @@ def admin_dashboard(request):
         'user_role': 'Administrador',
         'is_admin': True,
         'total_usuarios': total_usuarios,
-        'total_asientos': total_asientos,
-        'total_cuentas': total_cuentas,
     }
     return render(request, 'users/admin_dashboard.html', context)
 
